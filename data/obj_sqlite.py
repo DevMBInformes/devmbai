@@ -138,6 +138,22 @@ class obj_sqlite:
         for table in _fullSql:
             self.sql_execute(table)
         
+    def generar_sql_insert(self, fields:dict, table_name:str)->bool:
+        keys = []
+        values = []
+        for k, v in fields.items():
+            keys.append(k)
+            if isinstance(v, str):
+                values.append(f'"{v}"')
+            else:
+                values.append(str(v))
+        keys_str = ", ".join(keys)
+        values_str = ", ".join(values)
+        _sql ="INSERT INTO {table_name} ({keys_str}) VALUES ({values_str});"
+        return bool(self.sql_execute(_sql)[0])
+
+
+
 
 
     def close(self):
