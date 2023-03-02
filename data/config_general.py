@@ -24,7 +24,7 @@ class config_general(obj_table):
         return None
 
     #block of properties
-    def set_id(self, _id)->None:
+    def set_id(self, _id:int)->None:
         ''' set the id''' 
         self.id = _id
         return None
@@ -34,7 +34,7 @@ class config_general(obj_table):
         self.log = self.convert_value(_log)
         return None
     
-    def set_lang(self, _lang)->None:
+    def set_lang(self, _lang:str)->None:
         ''' defines the languaje'''
         self._lang = _lang[:2]
         return None
