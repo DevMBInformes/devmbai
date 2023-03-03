@@ -1,10 +1,10 @@
 #!/bin/python
-from .obj_sqlite import obj_sqlite
+from obj_sqlite import obj_sqlite
 
 class obj_table:
 
     def __init__(self, data_base):
-        self.__data_base = data_base
+        self._data_base = data_base
 
 
     #overridden methods
@@ -35,7 +35,7 @@ class obj_table:
     def convert_class_to_dict(self)->dict:
         ''' convert the class in dict '''
         dict_class = self.__dict__.copy()
-        del dict_class['__data_base']
+        del dict_class['_data_base']
         return dict_class
 
 
@@ -53,7 +53,7 @@ class obj_table:
 
     def create_table(self)->bool:
         ''' create the table '''
-        obj_sql = obj_sqlite(self.__data_base) #create object obj_sqlite
+        obj_sql = obj_sqlite(self._data_base) #create object obj_sqlite
         self.values_table() # get default values in the class
         result = obj_sql.create_table(self.get_name(), self.convert_class_to_dict()) # create table
         obj_sql.close() # close object sqlite
@@ -61,9 +61,12 @@ class obj_table:
 
     def record_default_values(self):
         ''' record default values in the class '''
-        self.values_defualt()
+        self.values_default()
         values_default = self.convert_class_to_dict()
-        del values['id']
+        del values_default['id']
+        obj_sql = obj_sqlite(self._data_base)
+        obj_sql.insert(self.get_name(), values_default)
+
         
 
     def set_default_values(self):

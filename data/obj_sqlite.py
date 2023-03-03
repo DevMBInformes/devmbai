@@ -18,19 +18,22 @@ class obj_sqlite:
              }
 
     def __init__(self, database, con=True):
+        ''' initialize the class with the name of the database as a parameter '''
         self.__database = database
         if con == True:
             self.sql_connection()
 
 
     def sql_connection(self):
+        ''' connect white database'''
         try:
             self.__con = sqlite3.connect(self.__database)
         except Error:
             print(Error)
 
     
-    def sql_execute(self, sql, lastrow='0')->list:
+    def sql_execute(self, sql:str, lastrow='0')->list:
+        ''' sql execute'''
         _cursorObj = self.__con.cursor()
         try:
             _cursorObj.execute(sql)
@@ -40,7 +43,7 @@ class obj_sqlite:
             else:
                 return [True, True]
         except Error as err:
-            return [err,False]
+            return [False, err]
 
     
     def sql_query(self, sql):
@@ -61,13 +64,13 @@ class obj_sqlite:
             _sql += '\"{}\"'.format(_value)
         return self.sql_execute(_sql)
 
-    def insert(self, table, values):
+    def insert(self, table:str, values:dict)->list:
         _sql = "INSERT INTO {} ".format(table)
         _fields = ''
         _values = ''
         _SEP = ', '
         for k, v in values.items():
-        _fields += k + _SEP
+            _fields += k + _SEP
             if isinstance(v, str):
                 _values += '\"' + v + '\"' + _SEP
             else:

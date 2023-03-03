@@ -1,5 +1,5 @@
 #!/bin/python
-from .obj_table import obj_table
+from obj_table import obj_table
 class config_general(obj_table):
 
 
