@@ -111,14 +111,13 @@ class obj_sqlite:
 
 
 
-    def create_table(self, table:str, fields:dict)->bool:
+    def create_table(self, table:str, fields:dict):
         ''' Function for make the tables on database'''
         tmpCad = ''
         for k, v in fields.items():
             tmpCad += k + ' ' + v + ','
         dict_table = {table : tmpCad[:-1]}
-        _sql = 'CREATE TABLE IF NOT EXISTS {} '.format(dict_table)
-        return bool(self.sql_execute(_sql,'1')[0])
+        return self.create_tables(dict_table)
 
 
     def create_tables(self, dict_tables):
@@ -141,7 +140,7 @@ class obj_sqlite:
         for table in _fullSql:
             self.sql_execute(table)
         
-    def generar_sql_insert(self, fields:dict, table_name:str)->bool:
+    def generar_sql_insert(self, table_name:str, fields:dict)->bool:
         keys = []
         values = []
         for k, v in fields.items():
@@ -152,7 +151,7 @@ class obj_sqlite:
                 values.append(str(v))
         keys_str = ", ".join(keys)
         values_str = ", ".join(values)
-        _sql ="INSERT INTO {table_name} ({keys_str}) VALUES ({values_str});"
+        _sql =f"INSERT INTO {table_name} ({keys_str}) VALUES ({values_str});"
         return bool(self.sql_execute(_sql)[0])
 
 

@@ -1,5 +1,5 @@
 #!/bin/python
-from obj_table import obj_table
+from .obj_table import obj_table
 class config_general(obj_table):
 
 
@@ -18,7 +18,7 @@ class config_general(obj_table):
         ''' defines default values the table'''
         self.id = 'ip'
         self.log = 'i'
-        self.lang = 'i'
+        self.lang = 't'
         self.verbose = 'i'  
         self.vvv = 'i'
         return None

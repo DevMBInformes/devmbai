@@ -1,5 +1,5 @@
 #!/bin/python
-from obj_sqlite import obj_sqlite
+from .obj_sqlite import obj_sqlite
 
 class obj_table:
 
@@ -55,6 +55,8 @@ class obj_table:
         ''' create the table '''
         obj_sql = obj_sqlite(self._data_base) #create object obj_sqlite
         self.values_table() # get default values in the class
+        print(self.convert_class_to_dict())
+        print(self.get_name())
         result = obj_sql.create_table(self.get_name(), self.convert_class_to_dict()) # create table
         obj_sql.close() # close object sqlite
         return result # return boolean
@@ -63,8 +65,11 @@ class obj_table:
         ''' record default values in the class '''
         self.values_default()
         values_default = self.convert_class_to_dict()
+        print(values_default)
         del values_default['id']
+        print(self._data_base)
         obj_sql = obj_sqlite(self._data_base)
+        print(self.get_name)
         obj_sql.insert(self.get_name(), values_default)
 
         
