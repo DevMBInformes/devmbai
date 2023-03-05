@@ -46,15 +46,29 @@ class obj_sqlite:
             return [False, err]
 
     
-    def sql_query(self, sql):
+    def sql_query(self, sql:str)->list:
         _cursorObj = self.__con.cursor()
         try:
             _cursorObj.execute(sql)
             rows = _cursorObj.fetchall()
             return rows
         except Error as err:
-            return err
+            return [err]
 
+    def sql_query_with_names(self, sql, many=True)->dict:
+        _cursorObj = self.__con.cursor()
+        try:
+            _cursorObj.execute(sql)
+            name_fields = [descripcion[0] for descripcion in _cursorObj.description]
+            rows = _cursorObj.fetchall() if many else _cursorObj.fetchone()
+            _todict = {name_fields[i]: rows[i] for i in range(len(name_fields))}
+            return _todict
+        except Error as err:
+            error_dict = {}
+            error_dict['error'] = err
+            return error_dict
+            
+     
 
     def delete(self, table, _value, column='id'):
         _sql = "DELETE FROM {} WHERE {} = ".format(table, column)
@@ -87,16 +101,30 @@ class obj_sqlite:
         return result
 
 
-    def selectWhere(self, table, cond, columns='*'):
+    def selectCountRows(self, table:str)->int:
+        _sql = "SELECT * FROM {};".format(table)
+        result = len(self.sql_query(_sql))
+        return result
+
+
+    def selectWhere(self, table:str, cond:str, columns='*'):
+        ''' make a sql query select {column='*'} from {table} where {cond}'''
         _sql = "SELECT {} from {} WHERE {}".format(columns, table, cond)
         result = self.sql_query(_sql)
         return result
 
-    def selectOne(self, table, cond, columns='*'):
-        result = self.selectWhere(table, cond, columns)
-        return result[0]
+    def selectOne(self, table, cond):
+        _sql = "SELECT * from {} WHERE {}".format(table, cond)
+        result = self.sql_query_with_names(_sql, many=False)
+        return result
 
-    def update(self, table, values, cond):
+
+    def update(self, table:str, values:dict, cond:str):
+        '''
+            table: str, name of table
+            values : dict with values
+            cond: conditions for update de row
+        '''
         _sql = "UPDATE {} \nSET\n".format(table)
         _v_int = ''
         for k, v in values.items():
@@ -111,13 +139,13 @@ class obj_sqlite:
 
 
 
-    def create_table(self, table:str, fields:dict):
+    def create_table(self, table:str, fields:dict)->bool:
         ''' Function for make the tables on database'''
         tmpCad = ''
         for k, v in fields.items():
             tmpCad += k + ' ' + v + ','
         dict_table = {table : tmpCad[:-1]}
-        return self.create_tables(dict_table)
+        return bool(self.create_tables(dict_table))
 
 
     def create_tables(self, dict_tables):
@@ -139,22 +167,8 @@ class obj_sqlite:
             _fullSql.append(_sql)
         for table in _fullSql:
             self.sql_execute(table)
-        
-    def generar_sql_insert(self, table_name:str, fields:dict)->bool:
-        keys = []
-        values = []
-        for k, v in fields.items():
-            keys.append(k)
-            if isinstance(v, str):
-                values.append(f'"{v}"')
-            else:
-                values.append(str(v))
-        keys_str = ", ".join(keys)
-        values_str = ", ".join(values)
-        _sql =f"INSERT INTO {table_name} ({keys_str}) VALUES ({values_str});"
-        return bool(self.sql_execute(_sql)[0])
-
-
+        return True
+    
 
 
 
