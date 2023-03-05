@@ -61,10 +61,7 @@ class config_general(obj_table):
         ''' record default values in the class
             if the exists a field update this field, the number one.
         '''
-        self.values_default() # get the default values
-        values_default = self.convert_class_to_dict() #convert default values a class
-        del values_default['id'] # delete 'id'
-        #second part, update or new fields
+        values_default = self.prepare_values_default()
         obj_sql = obj_sqlite(self._data_base) #create obj.
         count_rows = obj_sql.selectCountRows(self.get_name())
         if count_rows==0:
@@ -73,7 +70,3 @@ class config_general(obj_table):
             result = obj_sql.update(self.get_name(),values_default, "id=1")
         obj_sql.close()
         return bool(result[0])
-
-
-
-

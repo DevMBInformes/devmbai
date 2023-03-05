@@ -41,7 +41,9 @@ os.system('sleep 1')
 
 #tenemos que poder generar valores propios
 print("\n3)Poder modifcar los valores")
-print('vamos a generar valores propios...seteamos primero: el cambio de idioma a "en", que sería ingles, con o.set_lang("en")')
+print('''
+        vamos a generar valores propios...seteamos primero: el cambio de idioma a "en", 
+        que sería ingles, con o.set_lang("en")''')
 o.set_lang("en")
 print('procedemos a guardar los valores a realizar el update_values_by_id...')
 result = o.update_values_by_id()
@@ -56,7 +58,8 @@ result = o.record_default_values()
 print(f'los resultado quedaron: {result}')
 o.get_values_config()
 os.system('sleep 1')
-print("\n5) Vamos a recuperar los valores de la base de datos y accedemos a través de la clase...")
+print('''\n5) Vamos a recuperar los valores de la base de datos y 
+accedemos a través de la clase...''')
 print(f'''
         id : {o.id}
         verbose : {o.verbose}
@@ -65,7 +68,8 @@ print(f'''
         log : {o.log}
       ''')
 
-input("\nTerminada la comprobación de la funcionalidad config_general, presione una tecla para continuar con las comprobaciones")
+input('''\nTerminada la comprobación de la funcionalidad config_general, 
+presione una tecla para continuar con las comprobaciones''')
 os.system("clear")
 print('''
       Vamos a continuar con las comprobaciones en la clase, config_text_gpt.
@@ -83,4 +87,7 @@ print("\n1) Si la tabla no existe crearla")
 o = config_text_gpt(data_base_proob)
 result = o.create_table()
 print(f"El resultado es... {result}")
-
+os.system("sleep 1")
+print("vamos a generar los valores por defecto")
+result = o.record_default_values()
+print(f"El resultado fue {result}")

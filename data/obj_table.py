@@ -19,6 +19,8 @@ class obj_table:
          this method should be overridden'''
         return None
 
+    def record_default_values(self)->bool:
+        return True
 
     # methods
 
@@ -62,3 +64,10 @@ class obj_table:
         result = obj_sql.update(self.get_name(), values_of_class,f'id={_id}')
         obj_sql.close()
         return bool(result[0])
+
+    def prepare_values_default(self)->dict:
+        self.values_default()
+        values_default = self.convert_class_to_dict()
+        del values_default['id']
+        return values_default
+
