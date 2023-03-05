@@ -55,13 +55,18 @@ class obj_sqlite:
         except Error as err:
             return [err]
 
-    def sql_query_with_names(self, sql, many=True)->dict:
+
+
+    def sql_query_with_names(self, sql)->dict:
         _cursorObj = self.__con.cursor()
         try:
             _cursorObj.execute(sql)
             name_fields = [descripcion[0] for descripcion in _cursorObj.description]
-            rows = _cursorObj.fetchall() if many else _cursorObj.fetchone()
-            _todict = {name_fields[i]: rows[i] for i in range(len(name_fields))}
+            rows = _cursorObj.fetchall() #if many else [_cursorObj.fetchone()]
+            _todict = {}
+            for i, row in enumerate(rows):
+                _temp_dict = {name_fields[i]: row[i] for i in range(len(name_fields))}
+                _todict[i] = _temp_dict
             return _todict
         except Error as err:
             error_dict = {}
@@ -95,9 +100,12 @@ class obj_sqlite:
         return self.sql_execute(_sql)
 
 
-    def selectAll(self, table, columns='*'):
+    def selectAll(self, table, columns='*', with_names=True):
         _sql = "SELECT {} from {}".format(columns, table)
-        result = self.sql_query(_sql)
+        if with_names:
+            result = self.sql_query_with_names(_sql)
+        else:
+            result = self.sql_query(_sql)
         return result
 
 
@@ -113,9 +121,12 @@ class obj_sqlite:
         result = self.sql_query(_sql)
         return result
 
-    def selectOne(self, table, cond):
+    def selectOne(self, table, cond, with_names=True):
         _sql = "SELECT * from {} WHERE {}".format(table, cond)
-        result = self.sql_query_with_names(_sql, many=False)
+        if with_names:
+            result = self.sql_query_with_names(_sql)
+        else:
+            result = self.sql_query(_sql)
         return result
 
 

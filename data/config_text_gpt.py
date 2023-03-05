@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 class config_text_gpt(obj_table):
 
     def values_default(self)->None:
-        self.name = 'configDefault'
+        self.name = 'configDefault3'
         self.url = "https://api.openai.com/v1/completions"
         self.temperature = 0.3
         self.model = "text-davinci-002"
@@ -90,7 +90,9 @@ class config_text_gpt(obj_table):
     def record_default_values(self) -> bool:
         values_default = self.prepare_values_default()
         obj_sql = obj_sqlite(self._data_base)
-        count = obj_sql.selectOne(self.get_name(), f'name="{values_default["name"]}"')
-        
-        print(count)
-        return True
+        count = obj_sql.selectOne(self.get_name(), f'name="{values_default["name"]}"',with_names=False)
+        if len(count)==0:
+            obj_sql.insert(self.get_name(),values_default)
+            return True
+        else:
+            return False

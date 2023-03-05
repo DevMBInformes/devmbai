@@ -75,12 +75,11 @@ print('''
       Vamos a continuar con las comprobaciones en la clase, config_text_gpt.
       Lo que esta clase debe poder realizar es lo siguiente:
       1) Si la tabla no existe, creala
-      2) Crear un registro con valores por defecto, en campo 1
-      3) Crear un registro con valores personalizados
-      4) Traer el listado de configuraciones disponibles
+      2) Crear un registro con valores por defecto, en campo cualquier campo, pero que haya un control para que no se pueda realizar dos veces con el mismo nombre.
+      3) Traer el listado de configuraciones disponibles
+      4) Crear un registro con valores personalizados
       5) Traer un registro disponible y poder verlo acceder a él através de la clase.
       6) modificar los valores de un registro.
-      
       ''')
 
 print("\n1) Si la tabla no existe crearla")
@@ -88,6 +87,11 @@ o = config_text_gpt(data_base_proob)
 result = o.create_table()
 print(f"El resultado es... {result}")
 os.system("sleep 1")
-print("vamos a generar los valores por defecto")
+print("\n2)vamos a generar los valores por defecto")
 result = o.record_default_values()
 print(f"El resultado fue {result}")
+os.system("sleep 1")
+print("\n3) Vamos a traer el listado de los valores actuales en la base de datos")
+result = o.get_list()
+print(f"El listado es este: {result}")
+

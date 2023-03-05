@@ -66,8 +66,21 @@ class obj_table:
         return bool(result[0])
 
     def prepare_values_default(self)->dict:
+        '''
+        prepare to values defaults, deleted the field id
+        ---
+
+        ---
+        return dict
+        '''
         self.values_default()
         values_default = self.convert_class_to_dict()
         del values_default['id']
         return values_default
 
+    def get_list(self)->dict:
+        ''' 
+        '''
+        obj_sql = obj_sqlite(self._data_base)
+        result = obj_sql.selectAll(self.get_name())
+        return result

@@ -50,17 +50,17 @@ class config_general(obj_table):
 
     def get_values_config(self)->dict:
         ''' get values configs'''
-        obj_sql = obj_sqlite(self._data_base)
-        result = obj_sql.selectOne(self.get_name(),'id=1')#obtenemos una unica tupla.
+        result = self.get_list() 
         if isinstance(result, dict):
-            for key, value in result.items():
+            for key, value in result[0].items():
                 setattr(self, key, value)
-        return result
+        return result[0]
 
     def record_default_values(self)->bool:
         ''' record default values in the class
             if the exists a field update this field, the number one.
         '''
+        #second part, update or new fields
         values_default = self.prepare_values_default()
         obj_sql = obj_sqlite(self._data_base) #create obj.
         count_rows = obj_sql.selectCountRows(self.get_name())
