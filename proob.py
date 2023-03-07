@@ -87,11 +87,15 @@ o = config_text_gpt(data_base_proob)
 result = o.create_table()
 print(f"El resultado es... {result}")
 os.system("sleep 1")
+
 print("\n2)vamos a generar los valores por defecto")
 result = o.record_default_values()
 print(f"El resultado fue {result}")
 os.system("sleep 1")
+
 print("\n3) Vamos a traer el listado de los valores actuales en la base de datos")
 result = o.get_list()
 print(f"El listado es este: {result}")
+
+
 
